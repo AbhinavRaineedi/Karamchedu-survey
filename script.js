@@ -413,30 +413,3 @@ window.onclick = function(event) {
 
 // Close modal with X button
 document.querySelector('.close').onclick = closeModal;
-
-/* Delete Button Styles */
-.btn-danger {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: all 0.3s ease;
-}
-
-.btn-danger:hover {
-    background: linear-gradient(135deg, #ff5252, #d32f2f);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-}
-
-.btn-sm {
-    padding: 6px 12px;
-    font-size: 11px;
-}
-
-.data-table td:last-child {
-    text-align: center;
-}

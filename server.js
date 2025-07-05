@@ -33,12 +33,13 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// Database setup
-const db = new sqlite3.Database('./karamchedu_survey.db', (err) => {
+// Database setup with Render persistent storage support
+const dbPath = process.env.DATABASE_PATH || './karamchedu_survey.db';
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
     } else {
-        console.log('✅ Connected to SQLite database');
+        console.log(`✅ Connected to SQLite database at: ${dbPath}`);
         initDatabase();
     }
 });

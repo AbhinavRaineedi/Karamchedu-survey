@@ -168,32 +168,11 @@ function displaySurveyData(data) {
             <td>${survey.headName}</td>
             <td>${survey.phone}</td>
             <td>${survey.familyMembers}</td>
-            <td>${survey.caste}</td>
-            <td>${survey.profession}</td>
-            <td>${survey.income}</td>
-            <td>${survey.childrenCount || ''}</td>
-            <td>${survey.allEnrolled || ''}</td>
-            <td>${survey.notEnrolledReason || ''}</td>
-            <td>${survey.needScholarship || ''}</td>
-            <td>${survey.digitalDevices || ''}</td>
-            <td>${survey.specialNeeds || ''}</td>
-            <td>${survey.privateSchool || ''}</td>
-            <td>${survey.tuition || ''}</td>
-            <td>${survey.costPerYear || ''}</td>
-            <td>${survey.lifeInsurance || ''}</td>
-            <td>${survey.chronicIllness || ''}</td>
-            <td>${survey.illnessDetails || ''}</td>
-            <td>${survey.healthSchemes || ''}</td>
-            <td>${survey.healthInsurance || ''}</td>
-            <td>${survey.cleanWater || ''}</td>
-            <td>${survey.sanitation || ''}</td>
-            <td>${survey.elderlyCount || ''}</td>
-            <td>${survey.foodDelivery || ''}</td>
-            <td>${survey.payForFood || ''}</td>
-            <td>${survey.takeIfFree || ''}</td>
-            <td>${survey.medicineDelivery || ''}</td>
-            <td>${survey.hospitalVisits || ''}</td>
-            <td>${survey.bpCheck || ''}</td>
+            <td>${survey.childrenCount || 0}</td>
+            <td>${survey.elderlyCount || 0}</td>
+            <td>${survey.needScholarship === 'Yes' ? 'Yes' : 'No'}</td>
+            <td>${survey.healthInsurance === 'Yes' || survey.chronicIllness === 'Yes' ? 'Yes' : 'No'}</td>
+            <td>${survey.medicalAssistance === 'Yes' || survey.dailyAssistance === 'Yes' ? 'Yes' : 'No'}</td>
             <td>
                 <button class="btn btn-danger btn-sm" onclick="deleteSurvey(${survey.id}, '${survey.headName}')">
                     <i class="fas fa-trash"></i> Delete
@@ -210,9 +189,9 @@ async function deleteSurvey(surveyId, headName) {
     const confirmed = confirm(`Are you sure you want to delete the survey for ${headName}?\n\nThis action cannot be undone and will permanently remove the data from all files including CSV exports.`);
     
     if (!confirmed) {
-        return;
-    }
-    
+                    return;
+                }
+
     try {
         const response = await fetch(`/api/surveys/${surveyId}`, {
             method: 'DELETE',

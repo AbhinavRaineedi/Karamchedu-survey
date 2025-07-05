@@ -56,20 +56,26 @@ function initDatabase() {
             address TEXT,
             phone TEXT,
             familyMembers INTEGER,
+            bplCard TEXT,
             caste TEXT,
-            profession TEXT,
-            income TEXT,
-            privateSchool TEXT,
-            tuition TEXT,
-            costPerYear TEXT,
-            lifeInsurance TEXT,
+            childrenCount INTEGER,
+            allEnrolled TEXT,
+            notEnrolledReason TEXT,
+            needScholarship TEXT,
+            digitalDevices TEXT,
+            specialNeeds TEXT,
+            chronicIllness TEXT,
+            illnessDetails TEXT,
+            healthSchemes TEXT,
+            healthInsurance TEXT,
+            cleanWater TEXT,
+            sanitation TEXT,
             elderlyCount INTEGER,
-            foodDelivery TEXT,
-            payForFood TEXT,
-            takeIfFree TEXT,
-            medicineDelivery TEXT,
-            hospitalVisits TEXT,
-            bpCheck TEXT,
+            oldAgePension TEXT,
+            medicalAssistance TEXT,
+            dailyAssistance TEXT,
+            otherSchemes TEXT,
+            comments TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`);
 
@@ -132,8 +138,12 @@ app.post('/api/surveys', (req, res) => {
         const query = `
             INSERT INTO surveys (
                 timestamp, date, headName, address, phone, familyMembers, 
-                caste, profession, income, privateSchool, tuition, costPerYear, lifeInsurance, elderlyCount, foodDelivery, payForFood, takeIfFree, medicineDelivery, hospitalVisits, bpCheck
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                bplCard, caste, childrenCount, allEnrolled, notEnrolledReason,
+                needScholarship, digitalDevices, specialNeeds, chronicIllness,
+                illnessDetails, healthSchemes, healthInsurance, cleanWater,
+                sanitation, elderlyCount, oldAgePension, medicalAssistance,
+                dailyAssistance, otherSchemes, comments
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const params = [
@@ -143,20 +153,26 @@ app.post('/api/surveys', (req, res) => {
             survey.address,
             survey.phone,
             survey.familyMembers,
+            survey.bplCard,
             survey.caste,
-            survey.profession,
-            survey.income,
-            survey.privateSchool,
-            survey.tuition,
-            survey.costPerYear,
-            survey.lifeInsurance,
+            survey.childrenCount,
+            survey.allEnrolled,
+            survey.notEnrolledReason,
+            survey.needScholarship,
+            survey.digitalDevices,
+            survey.specialNeeds,
+            survey.chronicIllness,
+            survey.illnessDetails,
+            survey.healthSchemes,
+            survey.healthInsurance,
+            survey.cleanWater,
+            survey.sanitation,
             survey.elderlyCount,
-            survey.foodDelivery,
-            survey.payForFood,
-            survey.takeIfFree,
-            survey.medicineDelivery,
-            survey.hospitalVisits,
-            survey.bpCheck
+            survey.oldAgePension,
+            survey.medicalAssistance,
+            survey.dailyAssistance,
+            survey.otherSchemes,
+            survey.comments
         ];
 
         db.run(query, params, function(err) {

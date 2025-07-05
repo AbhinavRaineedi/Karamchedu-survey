@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karamchedu Village Survey - Government Schemes Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-heart"></i>
+                    <h1>Karamchedu Village Survey</h1>
+                </div>
+                <p class="subtitle">Supporting BPL Families with Government Schemes</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <button class="nav-btn active" data-tab="survey">
+                <i class="fas fa-clipboard-list"></i>
+                Survey Form
+            </button>
+            <button class="nav-btn" data-tab="data">
+                <i class="fas fa-database"></i>
+                View Data
+            </button>
+            <button class="nav-btn" data-tab="export">
+                <i class="fas fa-download"></i>
+                Export Data
+            </button>
+        </nav>
+
+        <!-- Survey Form Section -->
+        <section id="survey" class="tab-content active">
+            <div class="form-container">
+                <form id="surveyForm" class="survey-form">
+                    <!-- Section 1: Household Information -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-home"></i> Household Information</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="headName">Name of Head of Family *</label>
+                                <input type="text" id="headName" name="headName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address *</label>
+                                <textarea id="address" name="address" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="familyMembers">Number of Family Members *</label>
+                                <input type="number" id="familyMembers" name="familyMembers" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bplCard">BPL Card Number</label>
+                                <input type="text" id="bplCard" name="bplCard">
+                            </div>
+                            <div class="form-group">
+                                <label for="caste">Caste/Community (Optional)</label>
+                                <input type="text" id="caste" name="caste">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Education -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="childrenCount">Number of Children (0-18 years) *</label>
+                                <input type="number" id="childrenCount" name="childrenCount" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="allEnrolled">Are all children enrolled in school? *</label>
+                                <select id="allEnrolled" name="allEnrolled" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="notEnrolledReason" style="display: none;">
+                                <label for="notEnrolledReason">Reasons for not attending school</label>
+                                <textarea id="notEnrolledReasonText" name="notEnrolledReason"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="needScholarship">Need for scholarships or financial aid? *</label>
+                                <select id="needScholarship" name="needScholarship" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="digitalDevices">Access to digital learning devices? *</label>
+                                <select id="digitalDevices" name="digitalDevices" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="specialNeeds">Any child with special needs? *</label>
+                                <select id="specialNeeds" name="specialNeeds" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Health -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-heartbeat"></i> Health</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="chronicIllness">Any family member with chronic illness? *</label>
+                                <select id="chronicIllness" name="chronicIllness" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="illnessDetails" style="display: none;">
+                                <label for="illnessDetailsText">Details of chronic illness</label>
+                                <textarea id="illnessDetailsText" name="illnessDetails"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="healthSchemes">Access to government health schemes (Aarogyasri, etc.)? *</label>
+                                <select id="healthSchemes" name="healthSchemes" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="healthInsurance">Need for health insurance? *</label>
+                                <select id="healthInsurance" name="healthInsurance" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cleanWater">Access to clean drinking water? *</label>
+                                <select id="cleanWater" name="cleanWater" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sanitation">Access to toilets/sanitation? *</label>
+                                <select id="sanitation" name="sanitation" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Elder Care -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-user-friends"></i> Elder Care</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="elderlyCount">Number of elderly (60+ years) *</label>
+                                <input type="number" id="elderlyCount" name="elderlyCount" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="oldAgePension">Are they receiving old age pension? *</label>
+                                <select id="oldAgePension" name="oldAgePension" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="medicalAssistance">Any need for medical assistance? *</label>
+                                <select id="medicalAssistance" name="medicalAssistance" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dailyAssistance">Any need for daily living assistance? *</label>
+                                <select id="dailyAssistance" name="dailyAssistance" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Other Needs -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-plus-circle"></i> Other Needs</h2>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="otherSchemes">Any other government scheme you wish to benefit from?</label>
+                                <textarea id="otherSchemes" name="otherSchemes"></textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="comments">Any other comments or needs?</label>
+                                <textarea id="comments" name="comments"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Submit Survey
+                        </button>
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-undo"></i>
+                            Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Data View Section -->
+        <section id="data" class="tab-content">
+            <div class="data-container">
+                <h2><i class="fas fa-table"></i> Survey Responses</h2>
+                <div class="data-controls">
+                    <input type="text" id="searchInput" placeholder="Search responses..." class="search-input">
+                    <button id="refreshData" class="btn btn-secondary">
+                        <i class="fas fa-sync"></i>
+                        Refresh
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table id="dataTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Head of Family</th>
+                                <th>Phone</th>
+                                <th>Family Members</th>
+                                <th>Children</th>
+                                <th>Elderly</th>
+                                <th>Education Need</th>
+                                <th>Health Need</th>
+                                <th>Elder Care Need</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody">
+                            <!-- Data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Export Section -->
+        <section id="export" class="tab-content">
+            <div class="export-container">
+                <h2><i class="fas fa-download"></i> Export Data</h2>
+                <div class="export-options">
+                    <div class="export-card">
+                        <h3>Export to CSV</h3>
+                        <p>Download all survey responses as a CSV file for analysis in Excel or other spreadsheet software.</p>
+                        <button id="exportCSV" class="btn btn-primary">
+                            <i class="fas fa-file-csv"></i>
+                            Export to CSV
+                        </button>
+                    </div>
+                    <div class="export-card">
+                        <h3>Export Summary</h3>
+                        <p>Download a summary report with key statistics and insights from the survey data.</p>
+                        <button id="exportSummary" class="btn btn-secondary">
+                            <i class="fas fa-chart-bar"></i>
+                            Export Summary
+                        </button>
+                    </div>
+                </div>
+                <div class="stats-container">
+                    <h3>Quick Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalResponses">0</div>
+                            <div class="stat-label">Total Responses</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="educationNeeds">0</div>
+                            <div class="stat-label">Education Needs</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="healthNeeds">0</div>
+                            <div class="stat-label">Health Needs</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="elderCareNeeds">0</div>
+                            <div class="stat-label">Elder Care Needs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-check-circle"></i> Success!</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Survey response has been saved successfully!</p>
+                <p>Thank you for participating in the Karamchedu Village Survey.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

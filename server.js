@@ -56,26 +56,20 @@ function initDatabase() {
             address TEXT,
             phone TEXT,
             familyMembers INTEGER,
-            bplCard TEXT,
             caste TEXT,
-            childrenCount INTEGER,
-            allEnrolled TEXT,
-            notEnrolledReason TEXT,
-            needScholarship TEXT,
-            digitalDevices TEXT,
-            specialNeeds TEXT,
-            chronicIllness TEXT,
-            illnessDetails TEXT,
-            healthSchemes TEXT,
-            healthInsurance TEXT,
-            cleanWater TEXT,
-            sanitation TEXT,
+            profession TEXT,
+            income TEXT,
+            privateSchool TEXT,
+            tuition TEXT,
+            costPerYear TEXT,
+            lifeInsurance TEXT,
             elderlyCount INTEGER,
-            oldAgePension TEXT,
-            medicalAssistance TEXT,
-            dailyAssistance TEXT,
-            otherSchemes TEXT,
-            comments TEXT,
+            foodDelivery TEXT,
+            payForFood TEXT,
+            takeIfFree TEXT,
+            medicineDelivery TEXT,
+            hospitalVisits TEXT,
+            bpCheck TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`);
 
@@ -138,12 +132,8 @@ app.post('/api/surveys', (req, res) => {
         const query = `
             INSERT INTO surveys (
                 timestamp, date, headName, address, phone, familyMembers, 
-                bplCard, caste, childrenCount, allEnrolled, notEnrolledReason,
-                needScholarship, digitalDevices, specialNeeds, chronicIllness,
-                illnessDetails, healthSchemes, healthInsurance, cleanWater,
-                sanitation, elderlyCount, oldAgePension, medicalAssistance,
-                dailyAssistance, otherSchemes, comments
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                caste, profession, income, privateSchool, tuition, costPerYear, lifeInsurance, elderlyCount, foodDelivery, payForFood, takeIfFree, medicineDelivery, hospitalVisits, bpCheck
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const params = [
@@ -153,26 +143,20 @@ app.post('/api/surveys', (req, res) => {
             survey.address,
             survey.phone,
             survey.familyMembers,
-            survey.bplCard,
             survey.caste,
-            survey.childrenCount,
-            survey.allEnrolled,
-            survey.notEnrolledReason,
-            survey.needScholarship,
-            survey.digitalDevices,
-            survey.specialNeeds,
-            survey.chronicIllness,
-            survey.illnessDetails,
-            survey.healthSchemes,
-            survey.healthInsurance,
-            survey.cleanWater,
-            survey.sanitation,
+            survey.profession,
+            survey.income,
+            survey.privateSchool,
+            survey.tuition,
+            survey.costPerYear,
+            survey.lifeInsurance,
             survey.elderlyCount,
-            survey.oldAgePension,
-            survey.medicalAssistance,
-            survey.dailyAssistance,
-            survey.otherSchemes,
-            survey.comments
+            survey.foodDelivery,
+            survey.payForFood,
+            survey.takeIfFree,
+            survey.medicineDelivery,
+            survey.hospitalVisits,
+            survey.bpCheck
         ];
 
         db.run(query, params, function(err) {
@@ -213,6 +197,38 @@ app.get('/api/surveys/:id', (req, res) => {
             return;
         }
         res.json(row);
+    });
+});
+
+// Delete a survey by ID
+app.delete('/api/surveys/:id', (req, res) => {
+    const surveyId = req.params.id;
+    
+    // First check if survey exists
+    db.get('SELECT * FROM surveys WHERE id = ?', [surveyId], (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        
+        if (!row) {
+            return res.status(404).json({ error: 'Survey not found' });
+        }
+
+        // Delete the survey
+        db.run('DELETE FROM surveys WHERE id = ?', [surveyId], function(err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+
+            // Emit to all connected clients that a survey was deleted
+            io.emit('surveyDeleted', { id: surveyId, survey: row });
+            
+            res.json({
+                success: true,
+                message: 'Survey deleted successfully',
+                deletedSurvey: row
+            });
+        });
     });
 });
 

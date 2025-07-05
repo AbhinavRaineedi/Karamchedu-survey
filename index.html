@@ -62,12 +62,33 @@
                                 <input type="number" id="familyMembers" name="familyMembers" min="1" required>
                             </div>
                             <div class="form-group">
-                                <label for="bplCard">BPL Card Number</label>
-                                <input type="text" id="bplCard" name="bplCard">
+                                <label for="caste">Caste *</label>
+                                <select id="caste" name="caste" required>
+                                    <option value="">Select...</option>
+                                    <option value="FC">FC</option>
+                                    <option value="BC">BC</option>
+                                    <option value="SC">SC</option>
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label for="caste">Caste/Community (Optional)</label>
-                                <input type="text" id="caste" name="caste">
+                                <label for="profession">Profession *</label>
+                                <select id="profession" name="profession" required>
+                                    <option value="">Select...</option>
+                                    <option value="Agriculture">Agriculture</option>
+                                    <option value="Job">Job</option>
+                                    <option value="Not working">Not working</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="income">Monthly Income *</label>
+                                <select id="income" name="income" required>
+                                    <option value="">Select...</option>
+                                    <option value="<10,000">&lt;10,000</option>
+                                    <option value="10k-20k">10k–20k</option>
+                                    <option value="20k-30k">20k–30k</option>
+                                    <option value="30k-50k">30k–50k</option>
+                                    <option value=">50k">50k+</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -116,6 +137,92 @@
                                     <option value="No">No</option>
                                 </select>
                             </div>
+                            <!-- New questions below -->
+                            <div class="form-group">
+                                <label for="privateSchool">Are they going to private school? *</label>
+                                <select id="privateSchool" name="privateSchool" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tuition">Are they going to tuition/other classes? *</label>
+                                <select id="tuition" name="tuition" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="costPerYear">Overall cost for kids per year *</label>
+                                <select id="costPerYear" name="costPerYear" required>
+                                    <option value="">Select...</option>
+                                    <option value="10k-20k">10k–20k</option>
+                                    <option value="20k-30k">20k–30k</option>
+                                    <option value="30k-50k">30k–50k</option>
+                                    <option value=">50k">50k+</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Elder Care -->
+                    <div class="form-section">
+                        <h2><i class="fas fa-user-friends"></i> Elder Care</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="elderlyCount">Number of elderly (65+ years) *</label>
+                                <input type="number" id="elderlyCount" name="elderlyCount" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="foodDelivery">Will you take food delivered? *</label>
+                                <select id="foodDelivery" name="foodDelivery" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="payForFood">Will you pay ₹500 if food delivered? *</label>
+                                <select id="payForFood" name="payForFood" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="takeIfFree">Will you take if it is free? *</label>
+                                <select id="takeIfFree" name="takeIfFree" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="medicineDelivery">Do you need help with medicines delivery? *</label>
+                                <select id="medicineDelivery" name="medicineDelivery" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hospitalVisits">Do you need help with hospital visits? *</label>
+                                <select id="hospitalVisits" name="hospitalVisits" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bpCheck">Do you need help with checking BP/sugar/etc? *</label>
+                                <select id="bpCheck" name="bpCheck" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -123,6 +230,15 @@
                     <div class="form-section">
                         <h2><i class="fas fa-heartbeat"></i> Health</h2>
                         <div class="form-grid">
+                            <div class="form-group">
+                                <label for="lifeInsurance">Do you have life insurance? *</label>
+                                <select id="lifeInsurance" name="lifeInsurance" required>
+                                    <option value="">Select...</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <!-- Restored questions below -->
                             <div class="form-group">
                                 <label for="chronicIllness">Any family member with chronic illness? *</label>
                                 <select id="chronicIllness" name="chronicIllness" required>
@@ -162,41 +278,6 @@
                             <div class="form-group">
                                 <label for="sanitation">Access to toilets/sanitation? *</label>
                                 <select id="sanitation" name="sanitation" required>
-                                    <option value="">Select...</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 4: Elder Care -->
-                    <div class="form-section">
-                        <h2><i class="fas fa-user-friends"></i> Elder Care</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="elderlyCount">Number of elderly (60+ years) *</label>
-                                <input type="number" id="elderlyCount" name="elderlyCount" min="0" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="oldAgePension">Are they receiving old age pension? *</label>
-                                <select id="oldAgePension" name="oldAgePension" required>
-                                    <option value="">Select...</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="medicalAssistance">Any need for medical assistance? *</label>
-                                <select id="medicalAssistance" name="medicalAssistance" required>
-                                    <option value="">Select...</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="dailyAssistance">Any need for daily living assistance? *</label>
-                                <select id="dailyAssistance" name="dailyAssistance" required>
                                     <option value="">Select...</option>
                                     <option value="Yes">Yes</option>
                                     <option value="No">No</option>
@@ -258,6 +339,7 @@
                                 <th>Education Need</th>
                                 <th>Health Need</th>
                                 <th>Elder Care Need</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="dataTableBody">

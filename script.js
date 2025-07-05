@@ -168,14 +168,66 @@ function displaySurveyData(data) {
             <td>${survey.headName}</td>
             <td>${survey.phone}</td>
             <td>${survey.familyMembers}</td>
-            <td>${survey.childrenCount || 0}</td>
-            <td>${survey.elderlyCount || 0}</td>
-            <td>${survey.needScholarship === 'Yes' ? 'Yes' : 'No'}</td>
-            <td>${survey.healthInsurance === 'Yes' || survey.chronicIllness === 'Yes' ? 'Yes' : 'No'}</td>
-            <td>${survey.medicalAssistance === 'Yes' || survey.dailyAssistance === 'Yes' ? 'Yes' : 'No'}</td>
+            <td>${survey.caste}</td>
+            <td>${survey.profession}</td>
+            <td>${survey.income}</td>
+            <td>${survey.privateSchool}</td>
+            <td>${survey.tuition}</td>
+            <td>${survey.costPerYear}</td>
+            <td>${survey.lifeInsurance}</td>
+            <td>${survey.elderlyCount}</td>
+            <td>${survey.foodDelivery}</td>
+            <td>${survey.payForFood}</td>
+            <td>${survey.takeIfFree}</td>
+            <td>${survey.medicineDelivery}</td>
+            <td>${survey.hospitalVisits}</td>
+            <td>${survey.bpCheck}</td>
+            <td>
+                <button class="btn btn-danger btn-sm" onclick="deleteSurvey(${survey.id}, '${survey.headName}')">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </td>
         `;
         tbody.appendChild(row);
     });
+}
+
+// Delete survey with confirmation
+async function deleteSurvey(surveyId, headName) {
+    // Show confirmation dialog
+    const confirmed = confirm(`Are you sure you want to delete the survey for ${headName}?\n\nThis action cannot be undone and will permanently remove the data from all files including CSV exports.`);
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/surveys/${surveyId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            // Remove from local array
+            surveyData = surveyData.filter(survey => survey.id !== surveyId);
+            
+            // Update display
+            displaySurveyData(surveyData);
+            updateStatistics();
+            
+            // Show success notification
+            showNotification('Survey deleted successfully!');
+        } else {
+            alert(`Error: ${result.error}`);
+        }
+    } catch (error) {
+        console.error('Error deleting survey:', error);
+        alert('Error deleting survey. Please try again.');
+    }
 }
 
 // Filter data based on search input
@@ -303,6 +355,16 @@ function connectWebSocket() {
         showNotification('New survey submitted!');
     });
     
+    socket.on('surveyDeleted', (data) => {
+        // Remove deleted survey from local array
+        surveyData = surveyData.filter(survey => survey.id !== data.id);
+        displaySurveyData(surveyData);
+        updateStatistics();
+        
+        // Show notification
+        showNotification('A survey was deleted by another user');
+    });
+
     socket.on('disconnect', () => {
         console.log('Disconnected from server');
     });
@@ -360,3 +422,30 @@ window.onclick = function(event) {
 
 // Close modal with X button
 document.querySelector('.close').onclick = closeModal;
+
+/* Delete Button Styles */
+.btn-danger {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #ff5252, #d32f2f);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 11px;
+}
+
+.data-table td:last-child {
+    text-align: center;
+}

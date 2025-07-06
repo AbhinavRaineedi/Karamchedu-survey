@@ -17,6 +17,9 @@ const io = socketIo(server, {
     }
 });
 
+// Trust proxy for deployment environments
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet({
     contentSecurityPolicy: false // Allow inline scripts for development
@@ -26,20 +29,27 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname)));
 
-// Rate limiting
+// Rate limiting with better configuration for deployment
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+    max: 100, // limit each IP to 100 requests per windowMs
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    skipSuccessfulRequests: false,
+    skipFailedRequests: false
 });
 app.use('/api/', limiter);
 
-// Database setup with Render persistent storage support
-const dbPath = process.env.DATABASE_PATH || './karamchedu_survey.db';
+// Database setup with deployment environment support
+const dbPath = process.env.DATABASE_PATH || path.join(__dirname, 'karamchedu_survey.db');
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
+        console.error('Database path:', dbPath);
+        console.error('Current directory:', __dirname);
     } else {
         console.log(`✅ Connected to SQLite database at: ${dbPath}`);
+        console.log(`📁 Database file permissions: ${require('fs').statSync(dbPath).mode}`);
         initDatabase();
     }
 });
@@ -199,16 +209,23 @@ app.post('/api/surveys', (req, res) => {
 
         db.run(query, params, function(err) {
             if (err) {
+                console.error('Database insert error:', err);
+                console.error('Survey data:', JSON.stringify(survey, null, 2));
                 res.status(500).json({ error: err.message });
                 return;
             }
 
+            console.log(`✅ Survey inserted successfully with ID: ${this.lastID}`);
+
             // Get the inserted survey
             db.get('SELECT * FROM surveys WHERE id = ?', [this.lastID], (err, row) => {
                 if (err) {
+                    console.error('Error fetching inserted survey:', err);
                     res.status(500).json({ error: err.message });
                     return;
                 }
+
+                console.log(`📊 Survey data retrieved:`, row);
 
                 // Emit to all connected clients
                 io.emit('newSurvey', row);
@@ -336,12 +353,27 @@ app.get('/api/export/csv', (req, res) => {
     });
 });
 
-// Health check
+// Health check with database verification
 app.get('/api/health', (req, res) => {
-    res.json({ 
-        status: 'ok', 
-        timestamp: new Date().toISOString(),
-        database: 'connected'
+    // Test database connectivity
+    db.get('SELECT COUNT(*) as count FROM surveys', [], (err, row) => {
+        if (err) {
+            console.error('Database health check failed:', err);
+            return res.status(500).json({ 
+                status: 'error', 
+                timestamp: new Date().toISOString(),
+                database: 'disconnected',
+                error: err.message
+            });
+        }
+        
+        res.json({ 
+            status: 'ok', 
+            timestamp: new Date().toISOString(),
+            database: 'connected',
+            surveyCount: row.count,
+            dbPath: dbPath
+        });
     });
 });
 

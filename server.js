@@ -40,16 +40,67 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// Database setup with deployment environment support
-const dbPath = process.env.DATABASE_PATH || path.join(__dirname, 'karamchedu_survey.db');
-const db = new sqlite3.Database(dbPath, (err) => {
+// Database setup with permanent storage support
+let dbPath;
+let db;
+
+// Determine database path based on environment
+if (process.env.NODE_ENV === 'production') {
+    // Production: Use persistent storage paths
+    if (process.env.DATABASE_PATH) {
+        dbPath = process.env.DATABASE_PATH;
+    } else if (process.env.RAILWAY_VOLUME_MOUNT_PATH) {
+        // Railway persistent storage
+        dbPath = path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH, 'karamchedu_survey.db');
+    } else if (process.env.RENDER_VOLUME_PATH) {
+        // Render persistent storage
+        dbPath = path.join(process.env.RENDER_VOLUME_PATH, 'karamchedu_survey.db');
+    } else {
+        // Fallback to /tmp for other platforms
+        dbPath = '/tmp/karamchedu_survey.db';
+    }
+} else {
+    // Development: Use local path
+    dbPath = path.join(__dirname, 'karamchedu_survey.db');
+}
+
+console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+console.log(`📁 Database path: ${dbPath}`);
+
+// Create database directory if it doesn't exist
+const dbDir = path.dirname(dbPath);
+if (!require('fs').existsSync(dbDir)) {
+    require('fs').mkdirSync(dbDir, { recursive: true });
+    console.log(`📁 Created database directory: ${dbDir}`);
+}
+
+db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
-        console.error('Error opening database:', err.message);
-        console.error('Database path:', dbPath);
-        console.error('Current directory:', __dirname);
+        console.error('❌ Error opening database:', err.message);
+        console.error('📁 Database path:', dbPath);
+        console.error('📂 Current directory:', __dirname);
+        
+        // Try fallback path
+        const fallbackPath = path.join(__dirname, 'karamchedu_survey.db');
+        console.log(`🔄 Trying fallback path: ${fallbackPath}`);
+        
+        db = new sqlite3.Database(fallbackPath, (fallbackErr) => {
+            if (fallbackErr) {
+                console.error('❌ Fallback database also failed:', fallbackErr.message);
+            } else {
+                console.log(`✅ Connected to fallback database at: ${fallbackPath}`);
+                initDatabase();
+            }
+        });
     } else {
         console.log(`✅ Connected to SQLite database at: ${dbPath}`);
-        console.log(`📁 Database file permissions: ${require('fs').statSync(dbPath).mode}`);
+        try {
+            const stats = require('fs').statSync(dbPath);
+            console.log(`📁 Database file permissions: ${stats.mode}`);
+            console.log(`📊 Database file size: ${(stats.size / 1024).toFixed(2)} KB`);
+        } catch (e) {
+            console.log('📁 Could not get database file info');
+        }
         initDatabase();
     }
 });
@@ -350,6 +401,60 @@ app.get('/api/export/csv', (req, res) => {
         res.setHeader('Content-Type', 'text/csv');
         res.setHeader('Content-Disposition', 'attachment; filename="karamchedu_survey_data.csv"');
         res.send(csv);
+    });
+});
+
+// Backup database
+app.get('/api/backup', (req, res) => {
+    const backupPath = path.join(__dirname, 'backup', `karamchedu_survey_backup_${Date.now()}.db`);
+    
+    // Create backup directory if it doesn't exist
+    const backupDir = path.dirname(backupPath);
+    if (!require('fs').existsSync(backupDir)) {
+        require('fs').mkdirSync(backupDir, { recursive: true });
+    }
+    
+    // Create backup
+    const backup = new sqlite3.Database(backupPath);
+    db.backup(backup)
+        .then(() => {
+            backup.close();
+            res.json({ 
+                success: true, 
+                message: 'Database backed up successfully',
+                backupPath: backupPath,
+                timestamp: new Date().toISOString()
+            });
+        })
+        .catch(err => {
+            backup.close();
+            res.status(500).json({ error: err.message });
+        });
+});
+
+// Get database info
+app.get('/api/database-info', (req, res) => {
+    db.get('SELECT COUNT(*) as count FROM surveys', [], (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        
+        try {
+            const stats = require('fs').statSync(dbPath);
+            res.json({
+                surveyCount: row.count,
+                databasePath: dbPath,
+                fileSize: `${(stats.size / 1024).toFixed(2)} KB`,
+                lastModified: stats.mtime,
+                environment: process.env.NODE_ENV || 'development'
+            });
+        } catch (e) {
+            res.json({
+                surveyCount: row.count,
+                databasePath: dbPath,
+                environment: process.env.NODE_ENV || 'development'
+            });
+        }
     });
 });
 

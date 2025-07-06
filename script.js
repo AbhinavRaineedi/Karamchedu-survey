@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Global variables
 let surveyData = [];
 let socket;
+let isAuthenticated = false;
+let pendingTab = null;
 
 // Initialize the application
 function initApp() {
@@ -26,6 +28,13 @@ function setupNavigation() {
     navButtons.forEach(button => {
         button.addEventListener('click', () => {
             const targetTab = button.getAttribute('data-tab');
+            
+            // Check if tab requires authentication
+            if ((targetTab === 'data' || targetTab === 'export') && !isAuthenticated) {
+                pendingTab = targetTab;
+                showPasswordModal();
+                return;
+            }
             
             // Update active states
             navButtons.forEach(btn => btn.classList.remove('active'));
@@ -413,3 +422,79 @@ window.onclick = function(event) {
 
 // Close modal with X button
 document.querySelector('.close').onclick = closeModal;
+
+// Password Protection Functions
+function showPasswordModal() {
+    const modal = document.getElementById('passwordModal');
+    const accessCodeInput = document.getElementById('accessCode');
+    const errorDiv = document.getElementById('passwordError');
+    
+    // Reset modal state
+    accessCodeInput.value = '';
+    errorDiv.style.display = 'none';
+    modal.style.display = 'block';
+    
+    // Focus on input
+    accessCodeInput.focus();
+    
+    // Add enter key listener
+    accessCodeInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            verifyPassword();
+        }
+    });
+}
+
+function closePasswordModal() {
+    const modal = document.getElementById('passwordModal');
+    modal.style.display = 'none';
+    pendingTab = null;
+}
+
+function verifyPassword() {
+    const accessCode = document.getElementById('accessCode').value;
+    const errorDiv = document.getElementById('passwordError');
+    const correctCode = '121212';
+    
+    if (accessCode === correctCode) {
+        // Authentication successful
+        isAuthenticated = true;
+        closePasswordModal();
+        
+        // Navigate to pending tab
+        if (pendingTab) {
+            const navButton = document.querySelector(`[data-tab="${pendingTab}"]`);
+            navButton.click();
+            pendingTab = null;
+        }
+        
+        // Show success notification
+        showNotification('Access granted! Welcome to the data section.');
+        
+    } else {
+        // Authentication failed
+        errorDiv.style.display = 'block';
+        document.getElementById('accessCode').value = '';
+        document.getElementById('accessCode').focus();
+        
+        // Add shake animation
+        errorDiv.style.animation = 'none';
+        setTimeout(() => {
+            errorDiv.style.animation = 'errorShake 0.5s ease-in-out';
+        }, 10);
+    }
+}
+
+// Close password modal when clicking outside
+window.onclick = function(event) {
+    const successModal = document.getElementById('successModal');
+    const passwordModal = document.getElementById('passwordModal');
+    
+    if (event.target === successModal) {
+        closeModal();
+    }
+    
+    if (event.target === passwordModal) {
+        closePasswordModal();
+    }
+}

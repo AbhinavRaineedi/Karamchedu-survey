@@ -436,6 +436,37 @@
         </div>
     </div>
 
+    <!-- Password Protection Modal -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> Access Required</h3>
+                <span class="close" onclick="closePasswordModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>This section requires authentication. Please enter the 6-digit access code:</p>
+                <div class="password-input-container">
+                    <input type="password" id="accessCode" placeholder="Enter 6-digit code" maxlength="6" class="password-input">
+                    <div class="password-hint">Hint: Think of a repeating pattern</div>
+                </div>
+                <div id="passwordError" class="password-error" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Incorrect code. Please try again.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="verifyPassword()">
+                    <i class="fas fa-unlock"></i>
+                    Access
+                </button>
+                <button class="btn btn-secondary" onclick="closePasswordModal()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html> 

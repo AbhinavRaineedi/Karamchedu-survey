@@ -74,33 +74,7 @@ if (!require('fs').existsSync(dbDir)) {
     console.log(`📁 Created database directory: ${dbDir}`);
 }
 
-db = new sqlite3.Database(dbPath, (err) => {PS C:\Users\Abhi\Desktop\Karamchedu the second\karamchedu-survey> # Environment Variables:
-    PS C:\Users\Abhi\Desktop\Karamchedu the second\karamchedu-survey> NODE_ENV=production
-    NODE_ENV=production : The term 'NODE_ENV=production' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the 
-    spelling of the name, or if a path was included, verify that the path is correct and try again.        
-    At line:1 char:1
-    + NODE_ENV=production
-    + ~~~~~~~~~~~~~~~~~~~
-        + FullyQualifiedErrorId : CommandNotFoundException
-     
-    PS C:\Users\Abhi\Desktop\Karamchedu the second\karamchedu-survey> DATABASE_URL=postgresql://your-postgres-url
-    DATABASE_URL=postgresql://your-postgres-url : The term 'DATABASE_URL=postgresql://your-postgres-url' is not recognized as the name of a cmdlet, function,     
-    script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
-    At line:1 char:1
-    + DATABASE_URL=postgresql://your-postgres-url
-    + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        + CategoryInfo          : ObjectNotFound: (DATABASE_URL=po...ur-postgres-url:String) [], CommandNotFoundException
-        + FullyQualifiedErrorId : CommandNotFoundException
-     
-    PS C:\Users\Abhi\Desktop\Karamchedu the second\karamchedu-survey> PORT=10000
-    PORT=10000 : The term 'PORT=10000' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or 
-    if a path was included, verify that the path is correct and try again.
-    At line:1 char:1
-    + PORT=10000
-    + ~~~~~~~~~~
-        + CategoryInfo          : ObjectNotFound: (PORT=10000:String) [], CommandNotFoundException
-        + FullyQualifiedErrorId : CommandNotFoundException
-     
+db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('❌ Error opening database:', err.message);
         console.error('📁 Database path:', dbPath);
